@@ -5,143 +5,100 @@
 
 body {
     display: flex;
-    position: relative;
     font-family:'Courier New', Courier, monospace;
 }
 
 #conteiner {
-    position: relative;
     margin-left: auto;
     margin-right: auto;
     margin-top: 50px;
+    border: 1px solid black;
 }
 
-.conteiner-header {
+.checkbox {
+    width: 350px;
+    padding: 10px 10px 5px 10px;
+}
+
+.date-check {
+    width: 24px;
+    height: 24px;
+    padding-left: 20px;
+}
+
+.date {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
-.add-product {
-    background-image: url(../img/add.png);
-    background-size: cover;
-    width: 15px;
-    height: 15px;
-    margin-top: auto;
-    margin-bottom: auto;
-}
-
-#table-list {
-    width: 500px;
-    font-size: 18px;
-    margin: auto;
-    border: 1px solid gray;
-}
-
-td {
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-.icons {
-    display: flex;
+    padding: 5px 10px 10px 10px;
     flex-direction: row;
+    justify-content: space-between;
 }
 
-.delete {
-    width: 12px;
-    height: 12px;
-    background-image: url(../img/cancel.png);
-    background-size: cover;
+.date-input-there {
+    width: 99%;
 }
 
-.edit {
-    width: 12px;
-    height: 12px;
-    margin-right: 4px;
-    background-image: url(../img/pencil.png);
-    background-size: cover;
+.input-there {
+    position: relative;
+    width: inherit;
 }
 
-
-#pop-up {
-    flex-wrap: wrap;
-    padding: 10px 20px;
-    position: fixed;
-    left: calc(50vw - 200px);
-    top: 40px;
-    width: 300px;
-    background-color: white;
-    border: 1px solid black;
-}
-
-#pop-up > label {
-    width: 100%;
-    margin-bottom: 15px;
-    font-size: unset;
-}
-
-label > input {
-    width: 98.5%;
-    border-radius: 5px;
-    border-style: groove;
-}
-
-.buttons-save {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    width: 100%;
-    height: 30px;
+.date-input-back {
 
 }
 
-.buttons {
-    width: 80px;
-    height: 20px;
-    background-color: white;
-    border-style: groove;
-    border-radius: 5px;
-}
+.input-back {
+    position: relative;
 
-#pop-up-delete {
-    flex-wrap: wrap;
-    padding: 10px 10px;
-    position: fixed;
-    left: calc(50vw - 75px);
-    top: 110px;
-    width: 150px;
-    background-color: white;
-    border: 1px solid black;
-    z-index: 1;
-}
-
-#pop-up-delete > h4 {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.btn {
-    width: 60px;
-}
-
-.btns-delete {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    width: 100%;
-    margin-top: 10px;
-    height: 30px;
 }
 
 
-.error-title, .error-price {
+.date-choice {
     position: absolute;
-    width: 150px;
-    height: 15px;
-    font-size: 12px;
-    background-color: rgb(250, 109, 109);
+    flex-direction: column;
+    width: 170px;
+    height: 136px;
+    background-color: white;
     border: 1px solid rgb(187, 187, 187);
     border-radius: 4px;
     margin-bottom: 0.5rem;
+}
+
+.date-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 25px;
+    border-bottom: 1px solid #00000040;
+    background-color: aliceblue;
+}
+
+.date-header-title {
+    font-size: small;
+}
+
+.date-month {
+
+}
+
+.date-year {
+
+}
+
+.date-prev {
+    background-image: url(../img/left-arrow.png);
+    width: 16px;
+    height: 16px;
+}
+
+.date-next {
+    background-image: url(../img/right-arrow.png);
+    width: 16px;
+    height: 16px;
+}
+
+/* table */
+
+.calendar {
+    font-size: small;
 }

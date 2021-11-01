@@ -4,4 +4,4 @@ console.log('app started');
 
 const conteiner = new Widget();
 
-conteiner.renderDom();
+conteiner.events();
