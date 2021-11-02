@@ -10,8 +10,8 @@ export default class Widget {
     this.inputThere = document.querySelector('.input-there');
     this.datePrev = document.querySelector('.date-prev');
     this.dateNext = document.querySelector('.date-next');
-    this.inputBackValue = document.querySelector('.input-back').value;
-    this.inputThereValue = document.querySelector('.input-there').value;
+    this.inputBackValue = {};
+    this.inputThereValue = {};
     this.currentInput = null;
     this.count = 0;
   }
@@ -70,16 +70,18 @@ export default class Widget {
     const titleYear = document.querySelector('.date-year');
     const tableBody = document.querySelector('.calendar > tbody');
     const day = moment().format('D');
-    const month = moment().format('MMMM');
+    const month = moment().format('M');
     const year = moment().format('YYYY');
-    const curMonth = moment().add(m, 'month').format('MMMM');
+    const curMonth = moment().add(m, 'month').format('M');
     const daysInMonth = moment().add(m, 'month').daysInMonth();
     let firstDayMonth = 6;
     if (moment().add(m, 'month').startOf('month').day() !== 0) {
       firstDayMonth = (moment().add(m, 'month').startOf('month').day() - 1);
     }
 
-    titleMonth.textContent = curMonth;
+    console.log(moment().format('M'));
+
+    titleMonth.textContent = moment().add(m, 'month').format('MMMM');
     titleYear.textContent = year;
 
     if (!document.querySelector('.calendar > tbody > tr')) {
@@ -131,22 +133,29 @@ export default class Widget {
   }
 
   static dateChoiceBack(element, month, year) {
+    console.log(this.inputThereValue);
     for (const i of element) {
-      console.log(i.classList.contains('calendar-days'));
       i.addEventListener('click', (ev) => {
         if (document.querySelector('.input-back') === this.currentInput && !i.classList.contains('calendar-days')) {
-          document.querySelector('.input-back').value = `${ev.target.textContent} ${month} ${year}`;
+          if (this.inputThereValue.year <= +year && this.inputThereValue.month <= +month && this.inputThereValue.day <= +ev.target.textContent) {
+            document.querySelector('.input-back').value = `${ev.target.textContent}.${month}.${year}`;
+          }
         }
       });
     }
   }
 
   static dateChoiceThere(element, month, year) {
+    console.log(this.inputBackValue);
     for (const i of element) {
-      console.log(i.classList.contains('calendar-days'));
       i.addEventListener('click', (ev) => {
         if (document.querySelector('.input-there') === this.currentInput && !i.classList.contains('calendar-days')) {
-          document.querySelector('.input-there').value = `${ev.target.textContent} ${month} ${year}`;
+          document.querySelector('.input-there').value = `${ev.target.textContent}.${month}.${year}`;
+          this.inputThereValue = {
+            year: +year,
+            month: +month,
+            day: +ev.target.textContent,
+          };
         }
       });
     }
