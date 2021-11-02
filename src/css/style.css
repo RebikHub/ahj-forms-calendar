@@ -56,7 +56,6 @@ body {
     position: absolute;
     flex-direction: column;
     width: 170px;
-    height: 136px;
     background-color: white;
     border: 1px solid rgb(187, 187, 187);
     border-radius: 4px;
@@ -101,4 +100,27 @@ body {
 
 .calendar {
     font-size: small;
+}
+
+tbody > tr > th {
+    font-weight: 200;
+}
+
+.bold-date {
+    font-weight: 600;
+    color: black;
+    cursor: pointer;
+}
+
+.current-date {
+    background-color: cadetblue;
+}
+
+.calendar-days {
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.342);
+}
+
+.bold-date:hover {
+    background-color: cadetblue;
 }
