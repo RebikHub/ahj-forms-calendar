@@ -9,6 +9,7 @@ body {
 }
 
 #conteiner {
+    font-weight: 600;
     margin-left: auto;
     margin-right: auto;
     margin-top: 50px;
@@ -42,10 +43,6 @@ body {
     width: inherit;
 }
 
-.date-input-back {
-
-}
-
 .input-back {
     position: relative;
 
@@ -55,7 +52,7 @@ body {
 .date-choice {
     position: absolute;
     flex-direction: column;
-    width: 170px;
+    width: 157px;
     background-color: white;
     border: 1px solid rgb(187, 187, 187);
     border-radius: 4px;
@@ -74,20 +71,17 @@ body {
 
 .date-header-title {
     font-size: small;
-}
-
-.date-month {
-
-}
-
-.date-year {
-
+    font-weight: 600;
 }
 
 .date-prev {
     background-image: url(../img/left-arrow.png);
     width: 16px;
     height: 16px;
+}
+
+.date-prev-z {
+    z-index: -1;
 }
 
 .date-next {
@@ -103,11 +97,11 @@ body {
 }
 
 tbody > tr > th {
-    font-weight: 200;
+    font-weight: 600;
+    font-style: italic;
 }
 
 .bold-date {
-    font-weight: 600;
     color: black;
     cursor: pointer;
 }
@@ -117,7 +111,7 @@ tbody > tr > th {
 }
 
 .calendar-days {
-    cursor: pointer;
+    cursor: not-allowed;
     color: rgba(0, 0, 0, 0.342);
 }
 

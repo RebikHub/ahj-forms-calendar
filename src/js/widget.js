@@ -29,6 +29,7 @@ export default class Widget {
       const textThereDate = document.querySelector('.date-input-there > p');
       if (document.querySelector('.date-choice').style.display === 'flex') {
         document.querySelector('.date-choice').style.display = 'none';
+        this.count = 0;
       }
       if (this.checkbox.checked) {
         this.dateBack.style = 'display: block';
@@ -45,13 +46,15 @@ export default class Widget {
 
   dateBackInput() {
     this.inputBack.addEventListener('focus', () => {
-      Widget.popUpDate(this.inputBack);
+      this.count = 0;
+      this.popUpDate(this.inputBack);
     });
   }
 
   dateThereInput() {
     this.inputThere.addEventListener('focus', () => {
-      Widget.popUpDate(this.inputThere);
+      this.count = 0;
+      this.popUpDate(this.inputThere);
     });
   }
 
@@ -60,26 +63,36 @@ export default class Widget {
       i.addEventListener('click', () => {
         if (document.querySelector('.date-choice').style.display === 'flex' && !i.classList.contains('calendar-days')) {
           document.querySelector('.date-choice').style.display = 'none';
+          this.count = 0;
         }
       });
     }
   }
 
-  static dateMoment(m = 0) {
+  dateMoment(m = 0) {
     const titleMonth = document.querySelector('.date-month');
     const titleYear = document.querySelector('.date-year');
     const tableBody = document.querySelector('.calendar > tbody');
     const day = moment().format('D');
     const month = moment().format('M');
-    const year = moment().format('YYYY');
+    let year = +moment().format('YYYY');
     const curMonth = moment().add(m, 'month').format('M');
     const daysInMonth = moment().add(m, 'month').daysInMonth();
     let firstDayMonth = 6;
+
     if (moment().add(m, 'month').startOf('month').day() !== 0) {
       firstDayMonth = (moment().add(m, 'month').startOf('month').day() - 1);
     }
 
-    console.log(moment().format('M'));
+    if (m > 1) {
+      year += 1;
+    }
+
+    if (+curMonth > 11 || +year > 2021) {
+      document.querySelector('.date-prev').classList.remove('date-prev-z');
+    } else {
+      document.querySelector('.date-prev').classList.add('date-prev-z');
+    }
 
     titleMonth.textContent = moment().add(m, 'month').format('MMMM');
     titleYear.textContent = year;
@@ -95,7 +108,7 @@ export default class Widget {
 
     for (let i = 0; i < monthDays.length; i += 1) {
       monthDays[i].textContent = '';
-      monthDays[i].classList.add('calendar-days');
+      monthDays[i].classList.add('bold-date');
       monthDays[i].classList.remove('current-date');
     }
 
@@ -103,8 +116,10 @@ export default class Widget {
       if (j === firstDayMonth) {
         for (let i = 0; i < daysInMonth; i += 1) {
           monthDays[j + i].textContent = i + 1;
-          if ((i + 1) > +day) {
-            monthDays[j + i].classList.add('bold-date');
+          if ((i + 1) < +day && curMonth === month) {
+            monthDays[j + i].classList.remove('bold-date');
+            monthDays[j + i].classList.add('calendar-days');
+          } else {
             monthDays[j + i].classList.remove('calendar-days');
           }
           if ((i + 1) === +day && curMonth === month) {
@@ -112,32 +127,47 @@ export default class Widget {
           }
         }
       }
+      if (monthDays[j].textContent === '') {
+        monthDays[j].classList.remove('bold-date');
+        monthDays[j].classList.add('calendar-days');
+      }
     }
-    Widget.dateChoiceBack(monthDays, curMonth, year);
-    Widget.dateChoiceThere(monthDays, curMonth, year);
+
+    this.dateChoiceBack(monthDays, curMonth, year);
+    this.dateChoiceThere(monthDays, curMonth, year);
     Widget.otherClick(monthDays);
   }
 
   clickPrevMonth() {
     this.datePrev.addEventListener('click', () => {
       this.count -= 1;
-      Widget.dateMoment(this.count);
+      this.dateMoment(this.count);
     });
   }
 
   clickNextMonth() {
     this.dateNext.addEventListener('click', () => {
       this.count += 1;
-      Widget.dateMoment(this.count);
+      this.dateMoment(this.count);
     });
   }
 
-  static dateChoiceBack(element, month, year) {
-    console.log(this.inputThereValue);
+  dateChoiceBack(element, month, year) {
+    console.log(this.inputThereValue, +month, +year);
     for (const i of element) {
       i.addEventListener('click', (ev) => {
         if (document.querySelector('.input-back') === this.currentInput && !i.classList.contains('calendar-days')) {
-          if (this.inputThereValue.year <= +year && this.inputThereValue.month <= +month && this.inputThereValue.day <= +ev.target.textContent) {
+          if (this.inputThereValue.year === +year) {
+            console.log(this.inputThereValue, +month, +year);
+            if (this.inputThereValue.month === +month && this.inputThereValue.day < +ev.target.textContent) {
+              console.log(this.inputThereValue, +month, +year);
+              document.querySelector('.input-back').value = `${ev.target.textContent}.${month}.${year}`;
+            } else if (this.inputThereValue.month < +month) {
+              console.log(this.inputThereValue, +month, +year);
+              document.querySelector('.input-back').value = `${ev.target.textContent}.${month}.${year}`;
+            }
+          } else if (this.inputThereValue.year < +year) {
+            console.log(this.inputThereValue, +month, +year);
             document.querySelector('.input-back').value = `${ev.target.textContent}.${month}.${year}`;
           }
         }
@@ -145,8 +175,7 @@ export default class Widget {
     }
   }
 
-  static dateChoiceThere(element, month, year) {
-    console.log(this.inputBackValue);
+  dateChoiceThere(element, month, year) {
     for (const i of element) {
       i.addEventListener('click', (ev) => {
         if (document.querySelector('.input-there') === this.currentInput && !i.classList.contains('calendar-days')) {
@@ -161,7 +190,7 @@ export default class Widget {
     }
   }
 
-  static popUpDate(element) {
+  popUpDate(element) {
     element.focus();
     this.currentInput = element;
     const calendar = document.querySelector('.date-choice');
@@ -169,7 +198,7 @@ export default class Widget {
       calendar.style = 'display: none';
     }
     calendar.style = 'display: flex';
-    Widget.dateMoment();
+    this.dateMoment();
     element.offsetParent.appendChild(calendar);
     calendar.style.top = `${element.offsetTop + element.offsetHeight}px`;
     calendar.style.left = `${element.offsetLeft}px`;
