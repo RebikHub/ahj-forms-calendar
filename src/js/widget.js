@@ -10,7 +10,7 @@ export default class Widget {
     this.inputThere = document.querySelector('.input-there');
     this.datePrev = document.querySelector('.date-prev');
     this.dateNext = document.querySelector('.date-next');
-    this.inputBackValue = {};
+    this.inputBackValue = null;
     this.inputThereValue = {};
     this.currentInput = null;
     this.count = 0;
@@ -46,7 +46,6 @@ export default class Widget {
 
   dateBackInput() {
     this.inputBack.addEventListener('focus', () => {
-      this.count = 0;
       this.popUpDate(this.inputBack);
     });
   }
@@ -70,31 +69,40 @@ export default class Widget {
   }
 
   dateMoment(m = 0) {
+    const countMonth = m;
     const titleMonth = document.querySelector('.date-month');
     const titleYear = document.querySelector('.date-year');
     const tableBody = document.querySelector('.calendar > tbody');
-    const day = moment().format('D');
-    const month = moment().format('M');
+    let day = moment().format('D');
+    let month = moment().format('M');
     let year = +moment().format('YYYY');
-    const curMonth = moment().add(m, 'month').format('M');
-    const daysInMonth = moment().add(m, 'month').daysInMonth();
-    let firstDayMonth = 6;
 
-    if (moment().add(m, 'month').startOf('month').day() !== 0) {
-      firstDayMonth = (moment().add(m, 'month').startOf('month').day() - 1);
+    if (this.inputThereValue.thereYear) {
+      day = +this.inputThereValue.thereDay;
+      month = +this.inputThereValue.thereMonth;
     }
 
-    if (m > 1) {
+    const curMonth = moment().add(countMonth, 'month').format('M');
+    const daysInMonth = moment().add(countMonth, 'month').daysInMonth();
+    let firstDayMonth = 6;
+
+    if (moment().add(countMonth, 'month').startOf('month').day() !== 0) {
+      firstDayMonth = (moment().add(countMonth, 'month').startOf('month').day() - 1);
+    }
+
+    if (countMonth > 1) {
       year += 1;
     }
 
-    if (+curMonth > 11 || +year > 2021) {
+    if (this.count !== 0 && +curMonth !== +month) {
       document.querySelector('.date-prev').classList.remove('date-prev-z');
+    } else if (+curMonth === +month) {
+      document.querySelector('.date-prev').classList.add('date-prev-z');
     } else {
       document.querySelector('.date-prev').classList.add('date-prev-z');
     }
 
-    titleMonth.textContent = moment().add(m, 'month').format('MMMM');
+    titleMonth.textContent = moment().add(countMonth, 'month').format('MMMM');
     titleYear.textContent = year;
 
     if (!document.querySelector('.calendar > tbody > tr')) {
@@ -116,14 +124,11 @@ export default class Widget {
       if (j === firstDayMonth) {
         for (let i = 0; i < daysInMonth; i += 1) {
           monthDays[j + i].textContent = i + 1;
-          if ((i + 1) < +day && curMonth === month) {
+          if ((i + 1) < +day && +curMonth === +month) {
             monthDays[j + i].classList.remove('bold-date');
             monthDays[j + i].classList.add('calendar-days');
           } else {
             monthDays[j + i].classList.remove('calendar-days');
-          }
-          if ((i + 1) === +day && curMonth === month) {
-            monthDays[j + i].classList.add('current-date');
           }
         }
       }
@@ -133,8 +138,12 @@ export default class Widget {
       }
     }
 
-    this.dateChoiceBack(monthDays, curMonth, year);
-    this.dateChoiceThere(monthDays, curMonth, year);
+    if (+moment().format('M') === +curMonth) {
+      monthDays[(day - 1) - firstDayMonth].classList.add('current-date');
+    }
+
+    this.dateChoiceBack();
+    this.dateChoiceThere(curMonth);
     Widget.otherClick(monthDays);
   }
 
@@ -152,38 +161,33 @@ export default class Widget {
     });
   }
 
-  dateChoiceBack(element, month, year) {
-    console.log(this.inputThereValue, +month, +year);
-    for (const i of element) {
+  dateChoiceBack() {
+    const arrDays = document.querySelectorAll('.calendar > tbody > tr > th');
+    for (const i of arrDays) {
       i.addEventListener('click', (ev) => {
+        const year = document.querySelector('.date-year').textContent;
+        const month = document.querySelector('.date-month').textContent;
         if (document.querySelector('.input-back') === this.currentInput && !i.classList.contains('calendar-days')) {
-          if (this.inputThereValue.year === +year) {
-            console.log(this.inputThereValue, +month, +year);
-            if (this.inputThereValue.month === +month && this.inputThereValue.day < +ev.target.textContent) {
-              console.log(this.inputThereValue, +month, +year);
-              document.querySelector('.input-back').value = `${ev.target.textContent}.${month}.${year}`;
-            } else if (this.inputThereValue.month < +month) {
-              console.log(this.inputThereValue, +month, +year);
-              document.querySelector('.input-back').value = `${ev.target.textContent}.${month}.${year}`;
-            }
-          } else if (this.inputThereValue.year < +year) {
-            console.log(this.inputThereValue, +month, +year);
-            document.querySelector('.input-back').value = `${ev.target.textContent}.${month}.${year}`;
-          }
+          document.querySelector('.input-back').value = `${ev.target.textContent} ${month} ${year}`;
         }
       });
     }
   }
 
-  dateChoiceThere(element, month, year) {
-    for (const i of element) {
+  dateChoiceThere(numberMonth) {
+    const arrDays = document.querySelectorAll('.calendar > tbody > tr > th');
+    const year = document.querySelector('.date-year').textContent;
+    const month = document.querySelector('.date-month').textContent;
+
+    for (const i of arrDays) {
       i.addEventListener('click', (ev) => {
         if (document.querySelector('.input-there') === this.currentInput && !i.classList.contains('calendar-days')) {
-          document.querySelector('.input-there').value = `${ev.target.textContent}.${month}.${year}`;
+          document.querySelector('.input-there').value = `${ev.target.textContent} ${month} ${year}`;
           this.inputThereValue = {
-            year: +year,
-            month: +month,
-            day: +ev.target.textContent,
+            thereYear: +year,
+            thereMonth: +numberMonth,
+            thereDay: +ev.target.textContent,
+            count: this.count,
           };
         }
       });
@@ -198,7 +202,7 @@ export default class Widget {
       calendar.style = 'display: none';
     }
     calendar.style = 'display: flex';
-    this.dateMoment();
+    this.dateMoment(this.count);
     element.offsetParent.appendChild(calendar);
     calendar.style.top = `${element.offsetTop + element.offsetHeight}px`;
     calendar.style.left = `${element.offsetLeft}px`;
