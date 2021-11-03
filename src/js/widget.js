@@ -2,7 +2,6 @@ import moment from 'moment';
 
 export default class Widget {
   constructor() {
-    this.date = document.querySelector('.date');
     this.checkbox = document.querySelector('.date-check');
     this.dateBack = document.querySelector('.date-input-back');
     this.dateThere = document.querySelector('.date-input-there');
@@ -10,7 +9,6 @@ export default class Widget {
     this.inputThere = document.querySelector('.input-there');
     this.datePrev = document.querySelector('.date-prev');
     this.dateNext = document.querySelector('.date-next');
-    this.inputBackValue = null;
     this.inputThereValue = {};
     this.currentInput = null;
     this.count = 0;
