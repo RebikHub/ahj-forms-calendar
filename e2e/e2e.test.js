@@ -33,20 +33,11 @@ describe('input products', () => {
     server.kill();
   });
 
-  describe('valid input', () => {
-    test('should add error-title', async () => {
+  describe('input date', () => {
+    test('should add date there', async () => {
       await page.goto(baseUrl);
-      await page.click('.add-product');
-      await page.type('.input-text', '');
-      await page.click('.btn-save');
-      await page.waitForSelector('.error-title');
-    });
-    test('should add error-price', async () => {
-      await page.goto(baseUrl);
-      await page.click('.add-product');
-      await page.type('.input-number', '');
-      await page.click('.btn-save');
-      await page.waitForSelector('.error-price');
+      await page.click('.input-there');
+      await page.waitForSelector('.date-choice');
     });
   });
 });
